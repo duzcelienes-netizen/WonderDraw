@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'wonder_object_registry.dart';
 
 /// "Bu ne olabilir?" ekranında sunulan nesne türleri.
