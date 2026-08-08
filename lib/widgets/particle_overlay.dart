@@ -78,7 +78,7 @@ class _ParticlePainter extends CustomPainter {
       final opacity = fallsDown ? (1 - localT) : math.sin(localT * math.pi);
       final pos = Offset(startX + drift, startY + travel);
 
-      final particlePaint = paint..color = color.withOpacity(opacity.clamp(0.0, 1.0));
+      final particlePaint = paint..color = color.withValues(alpha: opacity.clamp(0.0, 1.0)); 
       final radius = 2.5 + random.nextDouble() * 2.5;
 
       switch (shape) {
