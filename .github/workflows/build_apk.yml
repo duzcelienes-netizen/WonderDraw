@@ -1,172 +1,100 @@
 name: Build WonderDraw Debug APK
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
-  build-apk:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Kodu al
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
+      - name: Flutter SDK kur (stable kanal)
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          cache: true
+          channel: 'stable'
 
-      - name: Show Flutter version
+      - name: Flutter sürümünü yazdır
         run: flutter --version
 
-      - name: Extract WonderDraw project
-        shell: bash
+      - name: android/ platformu yoksa oluştur
         run: |
-          set -e
-
-          ZIP_FILE=$(find . -maxdepth 1 -type f -name "*.zip" | head -n 1)
-
-          if [ -z "$ZIP_FILE" ]; then
-            echo "ERROR: WonderDraw ZIP file bulunamadı."
-            exit 1
-          fi
-
-          echo "ZIP bulundu: $ZIP_FILE"
-
-          mkdir -p extracted
-          unzip -q "$ZIP_FILE" -d extracted
-
-          echo "ZIP içeriği:"
-          find extracted -maxdepth 3 -type f | head -100
-
-      - name: Locate Flutter project
-        shell: bash
-        run: |
-          set -e
-
-          PUBSPEC=$(find extracted -name "pubspec.yaml" -type f | head -n 1)
-
-          if [ -z "$PUBSPEC" ]; then
-            echo "ERROR: pubspec.yaml bulunamadı."
-            exit 1
-          fi
-
-          PROJECT_DIR=$(dirname "$PUBSPEC")
-
-          echo "Flutter proje dizini: $PROJECT_DIR"
-          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-
-      - name: Check project files
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: |
-          echo "Flutter proje içeriği:"
-          ls -la
-
-          echo ""
-          echo "pubspec.yaml:"
-          test -f pubspec.yaml
-
-          echo ""
-          echo "lib klasörü:"
-          test -d lib
-
-      - name: Create Android platform
-        working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
-        run: |
-          set -e
-
           if [ ! -d "android" ]; then
-            echo "android klasörü yok. Flutter Android platformu oluşturuluyor..."
-
-            flutter create \
-              --platforms=android \
-              --org com.wonderdraw \
-              .
-
+            echo "android/ klasörü yok, oluşturuluyor..."
+            flutter create --platforms=android --org com.wonderdraw .
           else
-            echo "android klasörü zaten mevcut."
+            echo "android/ zaten mevcut, oluşturma adımı atlanıyor."
           fi
 
-      - name: Verify source files were not changed
-        working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
+      - name: lib/ ve pubspec.yaml dokunulmadan kaldı mı doğrula
         run: |
-          set -e
+          if [ -n "$(git status --porcelain lib pubspec.yaml)" ]; then
+            echo "HATA: flutter create, lib/ veya pubspec.yaml dosyalarını değiştirdi."
+            git diff lib pubspec.yaml
+            exit 1
+          fi
+          echo "OK: lib/ ve pubspec.yaml değişmedi."
 
-          echo "lib ve pubspec.yaml kontrol ediliyor..."
-
-          test -d lib
-          test -f pubspec.yaml
-
-          echo "OK: lib klasörü ve pubspec.yaml mevcut."
-
-      - name: Verify Android project
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: |
-          test -d android
-          test -f android/app/src/main/AndroidManifest.xml
-
-          echo "Android proje yapısı mevcut."
-
-      - name: Flutter pub get
-        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Bağımlılıkları indir
         run: flutter pub get
 
-      - name: Flutter analyze
-        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Kod kontrolü — reaction.dart ve widget_test.dart içeriğini göster
+        run: |
+          echo "=== REACTION SPEC ==="
+          grep -A12 "class ReactionSpec" lib/models/reaction.dart
+
+          echo "=== WIDGET TEST ==="
+          sed -n '1,80p' test/widget_test.dart
+
+      - name: reaction.dart içinde eski assert kalmadığını doğrula
+        run: |
+          if grep -q "assert(" lib/models/reaction.dart; then
+            echo "ERROR: reaction.dart içinde assert kaldı."
+            exit 1
+          fi
+          echo "OK: reaction.dart temiz."
+
+      - name: widget_test.dart içinde eski MyApp kalmadığını doğrula
+        run: |
+          if grep -q "MyApp" test/widget_test.dart; then
+            echo "ERROR: widget_test.dart içinde eski MyApp testi kaldı."
+            exit 1
+          fi
+          echo "OK: widget_test.dart temiz."
+
+      - name: Statik analiz
         run: flutter analyze
 
-      - name: Verify package ID
-        working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
-        run: |
-          set -e
-
-          EXPECTED="com.wonderdraw.wonderdraw"
-
-          APPLICATION_ID=$(grep -R "applicationId" android/app \
-            --include="*.gradle" \
-            --include="*.gradle.kts" \
-            | head -n 1 \
-            | sed -E 's/.*applicationId[^"]*"([^"]+)".*/\1/' \
-            || true)
-
-          echo "Bulunan applicationId: $APPLICATION_ID"
-          echo "Beklenen applicationId: $EXPECTED"
-
-          if [ "$APPLICATION_ID" != "$EXPECTED" ]; then
-            echo "ERROR: Package ID beklenen değerle eşleşmiyor."
-            exit 1
-          fi
-
-          echo "Package ID OK."
-
-      - name: Build debug APK
-        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Debug APK oluştur
         run: flutter build apk --debug
 
-      - name: Verify APK
-        working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
+      - name: APK dosyasının gerçekten oluştuğunu doğrula
         run: |
           APK_PATH="build/app/outputs/flutter-apk/app-debug.apk"
-
           if [ ! -f "$APK_PATH" ]; then
-            echo "ERROR: APK oluşturulamadı."
+            echo "HATA: APK bulunamadı: $APK_PATH"
             exit 1
           fi
+          echo "OK: APK bulundu -> $APK_PATH ($(du -h "$APK_PATH" | cut -f1))"
 
-          echo "APK başarıyla oluşturuldu."
-          ls -lh "$APK_PATH"
+      - name: Package ID'yi doğrula (com.wonderdraw.wonderdraw bekleniyor)
+        run: |
+          EXPECTED="com.wonderdraw.wonderdraw"
+          ACTUAL=$(grep -oE 'applicationId[[:space:]]*=?[[:space:]]*"[^"]+"' android/app/build.gradle* \
+            | grep -oE '"[^"]+"' | tr -d '"' | head -n1)
+          echo "Beklenen: $EXPECTED"
+          echo "Bulunan:  $ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "HATA: Package ID beklenenle eşleşmiyor."
+            exit 1
+          fi
+          echo "OK: Package ID doğrulandı."
 
-      - name: Upload APK artifact
+      - name: APK'yı artifact olarak yükle
         uses: actions/upload-artifact@v4
         with:
           name: wonderdraw-debug-apk
-          path: ${{ env.PROJECT_DIR }}/build/app/outputs/flutter-apk/app-debug.apk
-          if-no-files-found: error
+          path: build/app/outputs/flutter-apk/app-debug.apk
