@@ -51,8 +51,7 @@ class WonderObjectBehavior {
     this.magicAnimation = const MagicAnimationSpec(),
     this.ambientEffects = const [],
     this.personality = WonderPersonality.neutral,
-  }) : assert(touchReactions.length >= 3,
-            'PRD kuralı: her nesne için en az 3 farklı tepki tanımlanmalı.');
+  });
 
   final IdleAnimationSpec idleAnimation;
   final List<ReactionSpec> touchReactions;
