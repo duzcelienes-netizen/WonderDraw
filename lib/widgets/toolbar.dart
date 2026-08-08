@@ -137,7 +137,7 @@ class _ToolButton extends StatelessWidget {
           width: 52,
           height: 52,
           decoration: BoxDecoration(
-            color: selected ? WonderColors.sunYellow.withOpacity(0.3) : Colors.transparent,
+            color: selected ? WonderColors.sunYellow.withValues(alpha: 0.3) : Colors.transparent,
             shape: BoxShape.circle,
           ),
           child: Icon(icon, size: 28, color: WonderColors.ink),
