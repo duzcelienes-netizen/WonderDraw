@@ -180,7 +180,7 @@ class _SparklePainter extends CustomPainter {
       canvas.drawCircle(
         pos,
         3 + random.nextDouble() * 3,
-        Paint()..color = WonderColors.sunYellow.withOpacity(opacity),
+        Paint()..color = WonderColors.sunYellow.withValues(alpha: opacity),
       );
     }
   }
