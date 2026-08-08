@@ -52,7 +52,7 @@ class WonderToolbar extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(width: 10),
               itemBuilder: (context, index) {
                 final color = WonderColors.brushPalette[index];
-                final isSelected = color.value == activeColor.value;
+                final isSelected = color == activeColor;
                 return GestureDetector(
                   onTap: () => onColorChanged(color),
                   child: AnimatedContainer(
