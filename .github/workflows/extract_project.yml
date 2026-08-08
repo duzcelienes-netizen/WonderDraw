@@ -13,8 +13,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Extract project ZIP
+      - name: Extract WonderDraw ZIP
+        shell: bash
         run: |
           set -e
 
@@ -25,28 +28,64 @@ jobs:
             exit 1
           fi
 
-          rm -rf /tmp/wonderdraw
-          mkdir -p /tmp/wonderdraw
+          rm -rf /tmp/wonderdraw_extract
+          mkdir -p /tmp/wonderdraw_extract
 
-          unzip -q "$ZIP" -d /tmp/wonderdraw
+          unzip -q "$ZIP" -d /tmp/wonderdraw_extract
 
-          SOURCE_DIR="/tmp/wonderdraw/wonderdraw"
+          echo "ZIP içeriği:"
+          find /tmp/wonderdraw_extract -maxdepth 3 -type f | sort
 
-          if [ ! -d "$SOURCE_DIR" ]; then
-            echo "ERROR: ZIP içinde wonderdraw klasörü bulunamadı."
-            find /tmp/wonderdraw -maxdepth 2 -type f
-            exit 1
+          ROOT="/tmp/wonderdraw_extract"
+
+          if [ -d "$ROOT/wonderdraw" ]; then
+            ROOT="$ROOT/wonderdraw"
           fi
 
-          cp -R "$SOURCE_DIR"/. .
+          echo "Proje kökü: $ROOT"
 
-          rm -f wonderdraw_fix1.zip
-          rm -f wonderdraw_final.zip
+          # ZIP'in kendi GitHub Actions dosyalarını KOPYALAMIYORUZ.
+          # Repository'deki mevcut build_apk.yml korunacak.
+          rm -rf "$ROOT/.github"
 
-          echo "WonderDraw projesi repository köküne çıkarıldı."
+          # ZIP dosyalarını da projeye tekrar koyma.
+          find "$ROOT" -type f -name "*.zip" -delete
+
+          echo "Projeyi repository ana dizinine kopyalıyorum..."
+
+          cp -a "$ROOT"/. .
+
+          echo "Kontrol:"
+          test -d lib
+          test -f pubspec.yaml
+          test -f lib/main.dart
+
+          echo "Proje dosyaları başarıyla çıkarıldı."
+
+      - name: Verify important files
+        shell: bash
+        run: |
+          set -e
+
+          echo "lib:"
+          find lib -maxdepth 2 -type f | sort | head -100
+
+          echo
+          echo "pubspec.yaml:"
+          test -f pubspec.yaml
+
+          echo
+          echo "Existing build workflow:"
+          test -f .github/workflows/build_apk.yml
+
+          echo
+          echo "Kontroller başarılı."
 
       - name: Commit extracted project
+        shell: bash
         run: |
+          set -e
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -57,5 +96,6 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Extract WonderDraw project"
-          git push
+          git commit -m "chore: extract WonderDraw project"
+
+          git push origin HEAD:main
