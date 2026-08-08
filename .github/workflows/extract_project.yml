@@ -1,0 +1,61 @@
+name: Extract WonderDraw Project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP
+        run: |
+          set -e
+
+          ZIP="wonderdraw_fix1.zip"
+
+          if [ ! -f "$ZIP" ]; then
+            echo "ERROR: $ZIP bulunamadı."
+            exit 1
+          fi
+
+          rm -rf /tmp/wonderdraw
+          mkdir -p /tmp/wonderdraw
+
+          unzip -q "$ZIP" -d /tmp/wonderdraw
+
+          SOURCE_DIR="/tmp/wonderdraw/wonderdraw"
+
+          if [ ! -d "$SOURCE_DIR" ]; then
+            echo "ERROR: ZIP içinde wonderdraw klasörü bulunamadı."
+            find /tmp/wonderdraw -maxdepth 2 -type f
+            exit 1
+          fi
+
+          cp -R "$SOURCE_DIR"/. .
+
+          rm -f wonderdraw_fix1.zip
+          rm -f wonderdraw_final.zip
+
+          echo "WonderDraw projesi repository köküne çıkarıldı."
+
+      - name: Commit extracted project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "Commit edilecek değişiklik yok."
+            exit 0
+          fi
+
+          git commit -m "Extract WonderDraw project"
+          git push
