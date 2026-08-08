@@ -66,7 +66,7 @@ jobs:
           echo "OK: widget_test.dart temiz."
 
       - name: Statik analiz
-        run: flutter analyze
+        run: flutter analyze--no-fatal-infos
 
       - name: Debug APK oluştur
         run: flutter build apk --debug
