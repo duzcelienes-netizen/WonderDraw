@@ -21,13 +21,32 @@ class WonderObjectRegistry {
       ),
       magicAnimation: MagicAnimationSpec(glowIntensity: 1.0),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.bounce, duration: Duration(milliseconds: 600), sound: SoundCue.sunDing),
-        ReactionSpec(kind: ReactionKind.glowPulse, duration: Duration(milliseconds: 900), sound: SoundCue.sparkle),
-        ReactionSpec(kind: ReactionKind.spin, duration: Duration(milliseconds: 800), sound: SoundCue.sunDing),
-        ReactionSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 1000), sound: SoundCue.genericPop),
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.sunDing,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.glowPulse,
+          duration: Duration(milliseconds: 900),
+          sound: SoundCue.sparkle,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.spin,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.sunDing,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 1000),
+          sound: SoundCue.genericPop,
+        ),
       ],
       ambientEffects: [
-        AmbientEffectSpec(kind: ReactionKind.glowPulse, duration: Duration(milliseconds: 900)),
+        AmbientEffectSpec(
+          kind: ReactionKind.glowPulse,
+          duration: Duration(milliseconds: 900),
+        ),
       ],
     ),
     WonderObjectType.tree: const WonderObjectBehavior(
@@ -38,12 +57,27 @@ class WonderObjectRegistry {
         motion: ReactionKind.happySway,
       ),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.swayWithLeaves, duration: Duration(milliseconds: 1400), sound: SoundCue.leafRustle),
-        ReactionSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 900), sound: SoundCue.leafRustle),
-        ReactionSpec(kind: ReactionKind.bounce, duration: Duration(milliseconds: 700), sound: SoundCue.genericPop),
+        ReactionSpec(
+          kind: ReactionKind.swayWithLeaves,
+          duration: Duration(milliseconds: 1400),
+          sound: SoundCue.leafRustle,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 900),
+          sound: SoundCue.leafRustle,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.genericPop,
+        ),
       ],
       ambientEffects: [
-        AmbientEffectSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 1200)),
+        AmbientEffectSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 1200),
+        ),
       ],
     ),
     WonderObjectType.fish: const WonderObjectBehavior(
@@ -54,12 +88,27 @@ class WonderObjectRegistry {
         motion: ReactionKind.swimHappy,
       ),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.swimAway, duration: Duration(milliseconds: 700), sound: SoundCue.waterSplash),
-        ReactionSpec(kind: ReactionKind.swimBack, duration: Duration(milliseconds: 700), sound: SoundCue.waterSplash),
-        ReactionSpec(kind: ReactionKind.swimHappy, duration: Duration(milliseconds: 1000), sound: SoundCue.waterSplash),
+        ReactionSpec(
+          kind: ReactionKind.swimAway,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.waterSplash,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.swimBack,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.waterSplash,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.swimHappy,
+          duration: Duration(milliseconds: 1000),
+          sound: SoundCue.waterSplash,
+        ),
       ],
       ambientEffects: [
-        AmbientEffectSpec(kind: ReactionKind.swimHappy, duration: Duration(milliseconds: 1000)),
+        AmbientEffectSpec(
+          kind: ReactionKind.swimHappy,
+          duration: Duration(milliseconds: 1000),
+        ),
       ],
     ),
     WonderObjectType.cloud: const WonderObjectBehavior(
@@ -70,12 +119,27 @@ class WonderObjectRegistry {
         motion: ReactionKind.happySway,
       ),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.rainDrops, duration: Duration(milliseconds: 1200), sound: SoundCue.rainPatter),
-        ReactionSpec(kind: ReactionKind.bounce, duration: Duration(milliseconds: 600), sound: SoundCue.genericPop),
-        ReactionSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 1000), sound: SoundCue.genericPop),
+        ReactionSpec(
+          kind: ReactionKind.rainDrops,
+          duration: Duration(milliseconds: 1200),
+          sound: SoundCue.rainPatter,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 1000),
+          sound: SoundCue.genericPop,
+        ),
       ],
       ambientEffects: [
-        AmbientEffectSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 1500)),
+        AmbientEffectSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 1500),
+        ),
       ],
     ),
     WonderObjectType.star: const WonderObjectBehavior(
@@ -87,12 +151,27 @@ class WonderObjectRegistry {
       ),
       magicAnimation: MagicAnimationSpec(glowIntensity: 0.8),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.sparkleBurst, duration: Duration(milliseconds: 800), sound: SoundCue.sparkle),
-        ReactionSpec(kind: ReactionKind.glowPulse, duration: Duration(milliseconds: 700), sound: SoundCue.sparkle),
-        ReactionSpec(kind: ReactionKind.spin, duration: Duration(milliseconds: 600), sound: SoundCue.genericPop),
+        ReactionSpec(
+          kind: ReactionKind.sparkleBurst,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.sparkle,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.glowPulse,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.sparkle,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.spin,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
       ],
       ambientEffects: [
-        AmbientEffectSpec(kind: ReactionKind.glowPulse, duration: Duration(milliseconds: 700)),
+        AmbientEffectSpec(
+          kind: ReactionKind.glowPulse,
+          duration: Duration(milliseconds: 700),
+        ),
       ],
     ),
     WonderObjectType.house: const WonderObjectBehavior(
@@ -103,9 +182,21 @@ class WonderObjectRegistry {
         motion: ReactionKind.genericNod,
       ),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.houseBounceWithSmoke, duration: Duration(milliseconds: 1200), sound: SoundCue.smokePuff),
-        ReactionSpec(kind: ReactionKind.bounce, duration: Duration(milliseconds: 600), sound: SoundCue.genericPop),
-        ReactionSpec(kind: ReactionKind.genericNod, duration: Duration(milliseconds: 700), sound: SoundCue.genericPop),
+        ReactionSpec(
+          kind: ReactionKind.houseBounceWithSmoke,
+          duration: Duration(milliseconds: 1200),
+          sound: SoundCue.smokePuff,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.genericNod,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.genericPop,
+        ),
       ],
     ),
     WonderObjectType.car: const WonderObjectBehavior(
@@ -116,9 +207,21 @@ class WonderObjectRegistry {
         motion: ReactionKind.carWiggleWithWheels,
       ),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.carWiggleWithWheels, duration: Duration(milliseconds: 900), sound: SoundCue.carHonkSoft),
-        ReactionSpec(kind: ReactionKind.bounce, duration: Duration(milliseconds: 500), sound: SoundCue.genericPop),
-        ReactionSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 800), sound: SoundCue.genericPop),
+        ReactionSpec(
+          kind: ReactionKind.carWiggleWithWheels,
+          duration: Duration(milliseconds: 900),
+          sound: SoundCue.carHonkSoft,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 500),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.genericPop,
+        ),
       ],
     ),
     WonderObjectType.flower: const WonderObjectBehavior(
@@ -129,16 +232,152 @@ class WonderObjectRegistry {
         motion: ReactionKind.happySway,
       ),
       touchReactions: [
-        ReactionSpec(kind: ReactionKind.bloom, duration: Duration(milliseconds: 900), sound: SoundCue.bloomChime),
-        ReactionSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 700), sound: SoundCue.genericPop),
-        ReactionSpec(kind: ReactionKind.glowPulse, duration: Duration(milliseconds: 600), sound: SoundCue.sparkle),
+        ReactionSpec(
+          kind: ReactionKind.bloom,
+          duration: Duration(milliseconds: 900),
+          sound: SoundCue.bloomChime,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.glowPulse,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.sparkle,
+        ),
+      ],
+    ),
+    WonderObjectType.moon: const WonderObjectBehavior(
+      personality: WonderPersonality.calm,
+      idleAnimation: IdleAnimationSpec(
+        duration: Duration(seconds: 5),
+        reverses: true,
+        motion: ReactionKind.glowPulse,
+      ),
+      magicAnimation: MagicAnimationSpec(glowIntensity: 0.5),
+      touchReactions: [
+        ReactionSpec(
+          kind: ReactionKind.glowPulse,
+          duration: Duration(milliseconds: 900),
+          sound: SoundCue.sparkle,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 1100),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.genericNod,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.genericPop,
+        ),
+      ],
+    ),
+    WonderObjectType.bird: const WonderObjectBehavior(
+      personality: WonderPersonality.curious,
+      idleAnimation: IdleAnimationSpec(
+        duration: Duration(milliseconds: 1400),
+        reverses: true,
+        motion: ReactionKind.wingFlutter,
+      ),
+      touchReactions: [
+        ReactionSpec(
+          kind: ReactionKind.wingFlutter,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.genericPop,
+        ),
+      ],
+    ),
+    WonderObjectType.apple: const WonderObjectBehavior(
+      personality: WonderPersonality.happy,
+      idleAnimation: IdleAnimationSpec(
+        duration: Duration(seconds: 3),
+        reverses: true,
+        motion: ReactionKind.happySway,
+      ),
+      touchReactions: [
+        ReactionSpec(
+          kind: ReactionKind.bounce,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.sparkleBurst,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.sparkle,
+        ),
+      ],
+    ),
+    WonderObjectType.butterfly: const WonderObjectBehavior(
+      personality: WonderPersonality.gentle,
+      idleAnimation: IdleAnimationSpec(
+        duration: Duration(milliseconds: 1300),
+        reverses: true,
+        motion: ReactionKind.wingFlutter,
+      ),
+      touchReactions: [
+        ReactionSpec(
+          kind: ReactionKind.wingFlutter,
+          duration: Duration(milliseconds: 800),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 900),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.sparkleBurst,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.sparkle,
+        ),
+      ],
+    ),
+    WonderObjectType.bee: const WonderObjectBehavior(
+      personality: WonderPersonality.energetic,
+      idleAnimation: IdleAnimationSpec(
+        duration: Duration(milliseconds: 900),
+        reverses: true,
+        motion: ReactionKind.buzz,
+      ),
+      touchReactions: [
+        ReactionSpec(
+          kind: ReactionKind.buzz,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.wingFlutter,
+          duration: Duration(milliseconds: 600),
+          sound: SoundCue.genericPop,
+        ),
+        ReactionSpec(
+          kind: ReactionKind.happySway,
+          duration: Duration(milliseconds: 700),
+          sound: SoundCue.genericPop,
+        ),
       ],
     ),
   };
 
-  /// Henüz özel karakteri tanımlanmamış nesneler (M1'deki "yakında" davranışının
-  /// M2 karşılığı) — soğuk bir "desteklenmiyor" mesajı yerine nazik, jenerik
-  /// bir tepki verir.
+  /// Henüz özel karakteri tanımlanmamış nesneler için jenerik tepki.
   static const WonderObjectBehavior _generic = WonderObjectBehavior(
     personality: WonderPersonality.neutral,
     idleAnimation: IdleAnimationSpec(
@@ -147,9 +386,21 @@ class WonderObjectRegistry {
       motion: ReactionKind.genericNod,
     ),
     touchReactions: [
-      ReactionSpec(kind: ReactionKind.genericNod, duration: Duration(milliseconds: 700), sound: SoundCue.genericPop),
-      ReactionSpec(kind: ReactionKind.bounce, duration: Duration(milliseconds: 600), sound: SoundCue.genericPop),
-      ReactionSpec(kind: ReactionKind.happySway, duration: Duration(milliseconds: 800), sound: SoundCue.genericPop),
+      ReactionSpec(
+        kind: ReactionKind.genericNod,
+        duration: Duration(milliseconds: 700),
+        sound: SoundCue.genericPop,
+      ),
+      ReactionSpec(
+        kind: ReactionKind.bounce,
+        duration: Duration(milliseconds: 600),
+        sound: SoundCue.genericPop,
+      ),
+      ReactionSpec(
+        kind: ReactionKind.happySway,
+        duration: Duration(milliseconds: 800),
+        sound: SoundCue.genericPop,
+      ),
     ],
   );
 
@@ -157,5 +408,7 @@ class WonderObjectRegistry {
     return _behaviors[type] ?? _generic;
   }
 
-  static bool hasQualityBehavior(WonderObjectType type) => _behaviors.containsKey(type);
+  static bool hasQualityBehavior(WonderObjectType type) {
+    return _behaviors.containsKey(type);
+  }
 }
