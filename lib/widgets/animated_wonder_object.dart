@@ -10,13 +10,6 @@ import '../models/wonder_object.dart';
 import '../models/wonder_object_registry.dart';
 import '../widgets/particle_overlay.dart';
 
-/// Çocuğun çizimini canlandırır VE dokunma tepkileri verir.
-///
-/// DEĞİŞMEYEN İLKE (M1'den): bu widget çizimi (`drawing`) asla yeniden
-/// çizmez / yeniden üretmez. `_StaticDrawingPainter` her zaman aynı ham
-/// noktalardan çizer; her şey (idle döngü + tap reaction'lar) sadece
-/// etrafına uygulanan bir `Transform`dur — `motionFrameFor` tek hareket
-/// kaynağıdır, hem idle hem reaction bundan geçer.
 class AnimatedWonderObject extends StatefulWidget {
   const AnimatedWonderObject({
     super.key,
@@ -35,24 +28,30 @@ class AnimatedWonderObject extends StatefulWidget {
 
 class _AnimatedWonderObjectState extends State<AnimatedWonderObject>
     with TickerProviderStateMixin {
-  late final behavior = WonderObjectRegistry.behaviorFor(widget.objectType);
+  late final WonderObjectBehavior behavior =
+      WonderObjectRegistry.behaviorFor(widget.objectType);
 
   late final AnimationController _idleController;
   late final AnimationController _reactionController;
-  late final ReactionPicker _picker = ReactionPicker(behavior.touchReactions);
-  late final ReactionQueue _queue = ReactionQueue(onPlay: _playReaction);
+  late final ReactionPicker _picker =
+      ReactionPicker(behavior.touchReactions);
+  late final ReactionQueue _queue =
+      ReactionQueue(onPlay: _playReaction);
 
   ReactionSpec? _activeReaction;
 
   @override
   void initState() {
     super.initState();
+
     _idleController = AnimationController(
       vsync: this,
       duration: behavior.idleAnimation.duration,
     )..repeat(reverse: behavior.idleAnimation.reverses);
 
-    _reactionController = AnimationController(vsync: this);
+    _reactionController = AnimationController(
+      vsync: this,
+    );
   }
 
   @override
@@ -69,13 +68,23 @@ class _AnimatedWonderObjectState extends State<AnimatedWonderObject>
 
   Future<void> _playReaction(ReactionSpec reaction) async {
     if (!mounted) return;
-    setState(() => _activeReaction = reaction);
+
+    setState(() {
+      _activeReaction = reaction;
+    });
+
     HapticFeedback.selectionClick();
     widget.soundService.play(reaction.sound);
+
     _reactionController.duration = reaction.duration;
+
     await _reactionController.forward(from: 0);
+
     if (!mounted) return;
-    setState(() => _activeReaction = null);
+
+    setState(() {
+      _activeReaction = null;
+    });
   }
 
   @override
@@ -85,12 +94,24 @@ class _AnimatedWonderObjectState extends State<AnimatedWonderObject>
     return GestureDetector(
       onTap: _onTap,
       child: AnimatedBuilder(
-        animation: Listenable.merge([_idleController, _reactionController]),
+        animation: Listenable.merge([
+          _idleController,
+          _reactionController,
+        ]),
         builder: (context, child) {
           final reaction = _activeReaction;
+
           final frame = reaction != null
-              ? motionFrameFor(reaction.kind, _reactionController.value)
-              : motionFrameFor(behavior.idleAnimation.motion, _idleController.value);
+              ? motionFrameFor(
+                  reaction.kind,
+                  easingFor(reaction.kind).transform(
+                    _reactionController.value,
+                  ),
+                )
+              : motionFrameFor(
+                  behavior.idleAnimation.motion,
+                  _idleController.value,
+                );
 
           return Stack(
             clipBehavior: Clip.none,
@@ -100,7 +121,15 @@ class _AnimatedWonderObjectState extends State<AnimatedWonderObject>
                 child: Transform.rotate(
                   angle: frame.rotation,
                   alignment: Alignment.center,
-                  child: Transform.scale(scale: frame.scale, child: child),
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()
+                      ..scale(
+                        frame.effectiveScaleX,
+                        frame.effectiveScaleY,
+                      ),
+                    child: child,
+                  ),
                 ),
               ),
               if (frame.particle != null && !bbox.isEmpty)
@@ -126,9 +155,6 @@ class _AnimatedWonderObjectState extends State<AnimatedWonderObject>
   }
 }
 
-/// Statik (dönüştürülmemiş) çizimi olduğu gibi çizen painter.
-/// Transform işlemleri bu painter'ın DIŞINDA uygulanır — painter'ın kendisi
-/// hiçbir zaman noktaları değiştirmez. (M1'deki ilkeyle birebir aynı.)
 class _StaticDrawingPainter extends CustomPainter {
   _StaticDrawingPainter(this.drawing);
 
@@ -139,24 +165,40 @@ class _StaticDrawingPainter extends CustomPainter {
     for (final stroke in drawing.strokes) {
       if (stroke.points.length < 2) {
         if (stroke.points.isNotEmpty) {
-          canvas.drawCircle(stroke.points.first, stroke.strokeWidth / 2, Paint()..color = stroke.color);
+          canvas.drawCircle(
+            stroke.points.first,
+            stroke.strokeWidth / 2,
+            Paint()..color = stroke.color,
+          );
         }
         continue;
       }
+
       final paint = Paint()
         ..color = stroke.color
         ..strokeWidth = stroke.strokeWidth
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
         ..style = PaintingStyle.stroke;
-      final path = Path()..moveTo(stroke.points.first.dx, stroke.points.first.dy);
+
+      final path = Path()
+        ..moveTo(
+          stroke.points.first.dx,
+          stroke.points.first.dy,
+        );
+
       for (final point in stroke.points.skip(1)) {
         path.lineTo(point.dx, point.dy);
       }
+
       canvas.drawPath(path, paint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _StaticDrawingPainter oldDelegate) => false;
+  bool shouldRepaint(
+    covariant _StaticDrawingPainter oldDelegate,
+  ) {
+    return false;
+  }
 }
