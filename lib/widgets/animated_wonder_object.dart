@@ -7,6 +7,7 @@ import '../audio/sound_service.dart';
 import '../models/drawing.dart';
 import '../models/reaction.dart';
 import '../models/wonder_object.dart';
+import '../models/wonder_object_behavior.dart';
 import '../models/wonder_object_registry.dart';
 import '../widgets/particle_overlay.dart';
 
